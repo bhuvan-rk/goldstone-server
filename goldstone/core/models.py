@@ -587,12 +587,34 @@ class Region(PolyResource):
     """An OpenStack region."""
 
     @classmethod
+    def clouddata(cls):
+        """See the parent class' method's docstring."""
+
+        keystone_client = get_keystone_client()['client']
+
+        result = []
+
+        for entry in keystone_client.regions.list():
+            this_entry = entry.to_dict()
+
+            # Add the name of the resource type.
+            this_entry[cls.resource_type_name_key()] = cls.unique_class_id()
+
+            result.append(this_entry)
+
+        return result
+
+    @classmethod
     def outgoing_edges(cls):      # pylint: disable=R0201
         """Return the edges leaving this type."""
 
         return [{TO: AvailabilityZone,
+                 MATCHING_FN:
+                 lambda f, t: f.get("id") and f["id"] == t["zoneName"],
                  EDGE_ATTRIBUTES: {TYPE: OWNS, MIN: 1, MAX: sys.maxint}},
                 {TO: Endpoint,
+                 MATCHING_FN:
+                 lambda f, t: f.get("id") and f["id"] == t["region_id"],
                  EDGE_ATTRIBUTES: {TYPE: CONTAINS, MIN: 0, MAX: sys.maxint}},
                 ]
 
@@ -608,10 +630,31 @@ class Endpoint(PolyResource):
     """An OpenStack endpoint."""
 
     @classmethod
+    def clouddata(cls):
+        """See the parent class' method's docstring."""
+
+        keystone_client = get_keystone_client()['client']
+
+        result = []
+
+        for entry in keystone_client.endpoints.list():
+            this_entry = entry.to_dict()
+
+            # Add the name of the resource type.
+            this_entry[cls.resource_type_name_key()] = cls.unique_class_id()
+
+            result.append(this_entry)
+
+        return result
+
+    @classmethod
     def outgoing_edges(cls):      # pylint: disable=R0201
         """Return the edges leaving this type."""
 
         return [{TO: Service,
+                 MATCHING_FN:
+                 lambda f, t: f.get("service_id") and
+                 f.get("service_id") == t.get("id"),
                  EDGE_ATTRIBUTES: {TYPE: ASSIGNED_TO, MIN: 1, MAX: 1}},
                 ]
 
@@ -625,6 +668,24 @@ class Endpoint(PolyResource):
 
 class Service(PolyResource):
     """An OpenStack service."""
+
+    @classmethod
+    def clouddata(cls):
+        """See the parent class' method's docstring."""
+
+        keystone_client = get_keystone_client()['client']
+
+        result = []
+
+        for entry in keystone_client.services.list():
+            this_entry = entry.to_dict()
+
+            # Add the name of the resource type.
+            this_entry[cls.resource_type_name_key()] = cls.unique_class_id()
+
+            result.append(this_entry)
+
+        return result
 
     @classmethod
     def display_attributes(cls):

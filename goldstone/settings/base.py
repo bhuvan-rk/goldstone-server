@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'django_admin_bootstrapped',
     'django_extensions',
     'djoser',
+    'oauth2_provider',
     'polymorphic',
     'rest_framework',
     'rest_framework.authtoken',
@@ -246,11 +247,16 @@ DJOSER = {'DOMAIN': getfqdn(),
           'LOGIN_AFTER_REGISTRATION': True,
           }
 
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
+
 # Definitions for Django Rest Framework.
 REST_FRAMEWORK = {
     # We use token-based authentication everywhere.
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
     ),
     # Use hyperlinked styles by default.
     # Used only if the `serializer_class` attribute is not set on a view.

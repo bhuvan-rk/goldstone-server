@@ -21,8 +21,8 @@ from djoser import views as djoser_views
 from .views import RegistrationView, new_password_enter
 
 # Hook up a subset of the djoser package. We don't include djoser's URLconf
-# because that would root them at /accounts/XXX, making the URLs longer; and we
-# need to override some of djoser's code in order to process user profiles.
+# because that would make the URLs longer, and we need to override some of
+# djoser's code in order to process user profiles.
 urlpatterns = patterns(
     '',
     url(r'^register/$', RegistrationView.as_view(), name='register'),
