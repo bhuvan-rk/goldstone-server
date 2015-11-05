@@ -42,7 +42,7 @@ urlpatterns += patterns(
     url(r'^logging/', include('goldstone.glogging.urls')),
     url(r'^nova/', include('goldstone.nova.urls')),
     url(r'^user/', include("goldstone.user.urls")),
-    url(r'^o/', include('goldstone.oauth2.urls')),
+    url(r'^oauth2/', include('goldstone.oauth2.urls')),
     url(r'^$', RouterView.as_view()),
 )
 
