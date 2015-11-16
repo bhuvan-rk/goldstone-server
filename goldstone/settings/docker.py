@@ -54,7 +54,7 @@ STATIC_URL = '/static/'
 #
 # Please review the DOMAIN value.
 # Please review the SITE_NAME value.
-DJOSER = {'DOMAIN': getfqdn(),
+DJOSER = {'DOMAIN': os.environ.get('EXTERNAL_HOSTNAME', getfqdn()),
           'SITE_NAME': 'Goldstone',
           'PASSWORD_RESET_CONFIRM_URL':
           'accounts/password/reset/confirm/{uid}/{token}',
