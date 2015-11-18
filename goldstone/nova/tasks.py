@@ -49,7 +49,7 @@ def nova_hypervisors_stats():
     now = arrow.utcnow()
     conn = es_conn()
     es_index = daily_index(MetricData.INDEX_PREFIX)
-    es_doc_type = MetricData._doc_type.name
+    es_doc_type = MetricData._doc_type.name      # pylint: disable=W0212
 
     for key, value in response.items():
         doc = {
@@ -73,6 +73,7 @@ def nova_hypervisors_stats():
 
 
 def _update_nova_records(rec_type, region, database, items):
+    """Do the work for the discover_nova_topology task."""
     from goldstone.utils import to_es_date
 
     # image list is a generator, so we need to make it not sol lazy it...
